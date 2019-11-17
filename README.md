@@ -11,36 +11,56 @@ He runs on a diet of [nodejs](https://nodejs.org/en/) and [tmi.js](https://docs.
 
 **Some assembly required (it helps to be familiar with node).**
 
-## 🤖 Instructions (OSX/Linux)
+## 🤖 Instructions
 
-Before starting, make sure [nodejs](https://nodejs.org/en/download/) v8.9.0 or later is installed. You will also need a [webhook](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks) for the Discord channel where these clips will be posted.
+### Docker
 
-1.  Open terminal.
-2.  Navigate to a directory (like `~/Developer`).
-3.  Run `git clone https://github.com/mangosango/Clive.git && cd Clive`.
-4.  Run `npm install`
-5.  Copy `.env-exmaple` to `.env`\*
-6.  Open `.env` in a text editor (like [atom](https://atom.io/)).
-7.  Refer to the settings flags below.
-8.  Save `.env`.
-9.  In terminal, run `npm start`.
-10. ???
-11. Profit.
+```
+docker create \
+  --name=clive \
+  -e DISCORD_WEBHOOK_URL= \
+  -e TWITCH_CHANNELS=twitch \
+  -e TWITCH_CLIENT_ID= \
+  -e RESTRICT_CHANNELS=true \
+  -e MODS_ONLY=false \
+  -e SUBS_ONLY=false \
+  -e BROADCASTER_ONLY=false \
+  -e RICH_EMBED=true \
+  -e URL_AVATAR=http://i.imgur.com/9s3TBNv.png \
+  -e BOT_USERNAME=Clive \
+  -v </path/to/appdata/db>:/db \
+  --restart always \
+  axothic/clive
+```
 
-\* **.env file is primarily for development and debugging.** Environment variables are preferred for production environment. _To use environment variables, you can set all the flags below. `TWITCH_CHANNELS` should be a space limited set of `channel_name`s. You can set these in the provided `clive.service` file, or by using the `export` command. Here's a [short guide](http://blog.mdda.net/oss/2015/02/16/forever-node-service-systemd). on how to use systemd._
+### Docker-compose
 
-### 🚩 Settings Flags
+```
+version: "3"
+services:
+  clive:
+    image: axothic/clive
+    container_name: clive
+    environment:
+      - DISCORD_WEBHOOK_URL=
+      - TWITCH_CHANNELS=twitch
+      - TWITCH_CLIENT_ID=
+      - RESTRICT_CHANNELS=true
+      - MODS_ONLY=false
+      - SUBS_ONLY=false
+      - BROADCASTER_ONLY=false
+      - RICH_EMBED=true
+      - URL_AVATAR=http://i.imgur.com/9s3TBNv.png
+      - BOT_USERNAME=Clive
+    volumes:
+      - </path/to/appdata/db>:/db #optional (consistent database)
+    restart: always
+```
 
-`SETTING_NAME` (required or optional to be set) \[default production setting]
+### 🚩 Environment Flags
 
-- `NODE_ENV` (optional) \[production]
-  - Set to dev for development or production for normal usage
-- `LOG_LEVEL` (optional) \[error]
-  - Set to which level of logging you'd like. `debug` is good for development. `info` or `error` is good for normal usage. Checkout [Winston](https://github.com/winstonjs/winston#logging-levels) for more info.
-- `LOG_FILE` (required) \[/var/log/clive.log]
-  - Set this to the location of where you would like a log file. Make sure Clive has write permissions!
-- **`DB_FILE` (required)** \[db.json]
-  - Set this to the location of your JSON db file. If running as a service make sure to use the absolute file path.
+`ENVIRONMENT_NAME` (required or optional to be set) \[default production setting]
+
 - **`DISCORD_WEBHOOK_URL` (required)**
   - Set this to your Discord webhook for the channel you want Clive to post in! [Discord webhook URL](http://i.imgur.com/sEUCxct.png)
 - **`TWITCH_CHANNELS` (required)**
