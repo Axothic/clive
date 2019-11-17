@@ -362,10 +362,10 @@ function buildMessage({ userInfo, broadcasterInfo, gameInfo, clipInfo }) {
             url: clipInfo.url,
             color: 9442302,
             timestamp: clipInfo.created_at,
-            #thumbnail: {
-            #  url: gameInfo.box_art_url
-            #    .replace('{height}', '80')
-            #    .replace('{width}', '80'),
+            thumbnail: {
+              url: gameInfo.box_art_url
+                .replace('{height}', '80')
+                .replace('{width}', '80'),
             },
             author: {
               name: userInfo.display_name,
