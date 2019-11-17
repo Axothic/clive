@@ -64,3 +64,8 @@ db.json
 .idea
 out/
 .vscode/
+
+.eslintignore
+.eslintrc
+.prettierignore
+clive.service
